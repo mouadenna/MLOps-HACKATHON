@@ -15,7 +15,7 @@ from torch.autograd import Variable
 import timeit
 import cv2
 
-os.environ["CUDA_VISIBLE_DEVICES"] = ''
+os.environ["CUDA_VISIBLE_DEVICES"] = '0' if torch.cuda.is_available() else ''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -61,6 +61,8 @@ if __name__ == '__main__':
             sd[k] = loaded_dict[k]
     loaded_dict = sd
     model.load_state_dict(loaded_dict)
+    model = model.to(device)
+
     print("loaded checkpoint '{}' (epoch {}, best_score {})"
             .format(snap_to_load, checkpoint['epoch'], checkpoint['best_score']))
 
