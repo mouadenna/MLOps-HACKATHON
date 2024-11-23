@@ -15,7 +15,7 @@ from torch.autograd import Variable
 import timeit
 import cv2
 
-os.environ["CUDA_VISIBLE_DEVICES"] = ''
+os.environ["CUDA_VISIBLE_DEVICES"] = '0' if torch.cuda.is_available() else ''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -48,6 +48,7 @@ if __name__ == '__main__':
         snap_to_load = 'se154_loc_{}_1_best'.format(seed)
         model = SeNet154_Unet_Loc(pretrained=None)
         model = nn.DataParallel(model)
+        
         print("=> loading checkpoint '{}'".format(snap_to_load))
         checkpoint = torch.load(path.join(models_folder, snap_to_load), map_location="cuda")
         loaded_dict = checkpoint['state_dict']
@@ -57,6 +58,8 @@ if __name__ == '__main__':
                 sd[k] = loaded_dict[k]
         loaded_dict = sd
         model.load_state_dict(loaded_dict)
+        model = model.to(device)
+        
         print("loaded checkpoint '{}' (epoch {}, best_score {})"
                 .format(snap_to_load, checkpoint['epoch'], checkpoint['best_score']))
         model.eval()
