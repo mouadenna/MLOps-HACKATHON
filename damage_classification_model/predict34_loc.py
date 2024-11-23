@@ -72,7 +72,7 @@ if __name__ == '__main__':
         inp.append(img[::-1, ::-1, ...])
         inp = np.asarray(inp, dtype='float')
         inp = torch.from_numpy(inp.transpose((0, 3, 1, 2))).float()
-        inp = Variable(inp)
+        inp = Variable(inp.to(device))
 
         pred = []
         
