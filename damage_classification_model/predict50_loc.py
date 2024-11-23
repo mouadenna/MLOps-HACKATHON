@@ -16,6 +16,8 @@ import timeit
 import cv2
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ''
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 
 from zoo.models import SeResNext50_Unet_Loc
 
@@ -44,7 +46,7 @@ if __name__ == '__main__':
         model = SeResNext50_Unet_Loc(pretrained=None)
         
         print("=> loading checkpoint '{}'".format(snap_to_load))
-        checkpoint = torch.load(path.join(models_folder, snap_to_load), map_location='cpu')
+        checkpoint = torch.load(path.join(models_folder, snap_to_load), map_location=device)
         loaded_dict = checkpoint['state_dict']
         sd = model.state_dict()
         for k in model.state_dict():
