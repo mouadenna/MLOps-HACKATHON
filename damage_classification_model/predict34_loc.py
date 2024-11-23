@@ -46,7 +46,7 @@ if __name__ == '__main__':
         model = Res34_Unet_Loc(pretrained=None)
         model = nn.DataParallel(model)
         print("=> loading checkpoint '{}'".format(snap_to_load))
-        checkpoint = torch.load(path.join(models_folder, snap_to_load), map_location=device)
+        checkpoint = torch.load(path.join(models_folder, snap_to_load), map_location="cuda")
         loaded_dict = checkpoint['state_dict']
         sd = model.state_dict()
         for k in model.state_dict():
